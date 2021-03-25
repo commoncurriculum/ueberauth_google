@@ -142,8 +142,8 @@ defmodule Ueberauth.Strategy.Google do
     resp = Ueberauth.Strategy.Google.OAuth.get(token, path)
 
     case resp do
-      {:ok, %OAuth2.Response{status_code: 401, body: _body}} ->
-        set_errors!(conn, [error("token", "unauthorized")])
+      {:ok, %OAuth2.Response{status_code: 401, body: body}} ->
+        set_errors!(conn, [error("token", "unauthorized" <> body)])
       {:ok, %OAuth2.Response{status_code: status_code, body: user}} when status_code in 200..399 ->
         put_private(conn, :google_user, user)
       {:error, %OAuth2.Response{status_code: status_code}} ->
